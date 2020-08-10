@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using McMaster.Extensions.CommandLineUtils;
+using general_cli.Commands;
 
 namespace general_cli
 {
+    [Command(Name="general_cli", Description="A general purpose CLI"),
+                Subcommand(typeof(SendData)),
+                Subcommand(typeof(ReceiveData))]
     class Program
     {
-        static int Main(string[] args)
+        public static void Main(string[] args)
             => CommandLineApplication.Execute<Program>(args);
         
-        [Option(Description = "The subject")]
-        public string Subject {get;}
-
-        [Option(ShortName = "n")]
-        public int Count {get;}
-
-        private void OnExecute()
+        private int OnExecute(CommandLineApplication app, IConsole console)
         {
-            var subject = Subject ?? "world";
-            for(var i = 0; i<Count; i++)
-            {
-                Console.WriteLine($"Hello {Subject}!");
-            }
+            console.WriteLine("You must specify a subcommand.");
+            app.ShowHelp();
+            return 1;
         }
 
     }
 }
+
